@@ -516,8 +516,8 @@ class ItemBlock extends HTMLElement {
 		const stock = this.shadowRoot.querySelector('.stock');
 		const properties = this.shadowRoot.querySelectorAll('span');
 		title.innerText = this.hasAttribute('data-item-name') ? this.getAttribute('data-item-name') : 'Item';
-		price.innerText = this.hasAttribute('data-price') ? this.getAttribute('data-price') != '' ? `₹${this.getAttribute('data-price')}` : 'Not specified' : '- : -';
-		stock.innerText = this.hasAttribute('data-stock') ? this.getAttribute('data-stock') != '' ? this.getAttribute('data-stock') == 1 ? '1 item left' : `${this.getAttribute('data-stock')} Items left` : 'Not specified'  : '- : -';
+		price.innerText = this.hasAttribute('data-price') ? this.getAttribute('data-price') != '' ? `₹${this.getAttribute('data-price')}` : 'Price : Not specified' : '- : -';
+		stock.innerText = this.hasAttribute('data-stock') ? this.getAttribute('data-stock') != '' ? this.getAttribute('data-stock') == 1 ? '1 item left' : `${this.getAttribute('data-stock')} Items left` : 'Stock Not specified'  : '- : -';
 		if (this.hasAttribute('data-category-name')) {
 			this.shadowRoot.querySelector('.category').innerText = this.getAttribute('data-category-name');
         }else {
