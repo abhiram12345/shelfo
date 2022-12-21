@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width = device-width, initial-scale=1.0">
+<title>Shelf</title>
+<link rel="stylesheet" href="css/mystyle.css"/>
+<link rel="stylesheet" href="css/auth-style.css"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+</head>
+<body>
+    <!--Search-->
+    <header id="main-header">
+    <div id="search-shelf">
+    <input type="text" placeholder="Search shelf">
+    <button>
+    <span class="material-symbols-rounded">search</a>
+    </button>
+    </div>
+    <div id="notifications-icon">
+    <span class="material-symbols-rounded">notifications</a>
+    </div>
+    <div id="menu-icon" data-link="/menu">
+    <span class="material-symbols-rounded">menu</a>
+    </div>
+    </header>
+    <!--Menu-->
+    <section id="menu-container">
+    <div id="menu">
+    <!--Items-->
+    <div class="menu-sections">
+    <h3>Items</h3>
+    <span data-link="/">Items</span>
+    <span data-link="/outofstock">Out of stock</span>
+    <span data-link="/new-order">New Order</span>
+    <span data-link="/manage-items" class="short-cut">Manage Items</span>
+    </div>
+    <!--Account-->
+    <div class="menu-sections">
+    <h3>Account</h3>
+    </div>
+    </div>
+    </section>
+    <!--Pages-->
+    <section id="root">
+    </section>
+    <section id="search-view">
+    </section>
+    <script src="js/my-script.js">
+    </script>
+    <script src="js/components.js">
+    </script>
+    </body>
+</html>
