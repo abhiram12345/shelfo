@@ -933,7 +933,6 @@ const main = (() => {
     document.querySelector('#search-shelf input').addEventListener('input', function() {
         searchShelf.render();
      });
-     alert(document.querySelector('body').style.fontFamily);
     //Add eventListeber with menu functions
     menuIcon.addEventListener('click',openMenu);
 	//Add eventListener with onNavigate
