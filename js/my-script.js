@@ -145,6 +145,7 @@ const main = (() => {
 			            item.setAttribute('data-link', `/item-view?id=${i.itemId}`);
 			            item.addEventListener('click', onNavigate);
 			            this.view.appendChild(item);
+				    cursor.continue();
 			        }
 		        }else {
                     const el = document.createElement('empty-message');
