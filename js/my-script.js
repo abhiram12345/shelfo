@@ -129,30 +129,29 @@ const main = (() => {
 			const transaction= db.transaction(['items', 'categories'], 'readonly');
             const itemsStore = transaction.objectStore('items');
             const categoryStore = transaction.objectStore('categories');
-            itemsStore.getAll().onsuccess = event =>{
-	        	const items = event.target.result;
-	            if (items.length < 1) {
-	            	const el = document.createElement('empty-message');
+            itemsStore.openCursor().onsuccess = event =>{
+            	const cursor = event.target.result;
+	            if (cursor) {
+		            const i = cursor.value;
+		            const item = document.createElement('item-block');
+		            const categoryQuery = categoryStore.get(i.categoryId);
+		            categoryQuery.onsuccess = e =>{
+			            const catName = e.target.result.name;
+                        item.setAttribute('data-category-name', catName);
+                        item.setAttribute('data-item-name', i.name);
+			            item.setAttribute('data-price', i.price);
+			            item.setAttribute('data-stock', i.stockCount);
+			            item.showProperties(...i.customProperties);
+			            item.setAttribute('data-link', `/item-view?id=${i.itemId}`);
+			            item.addEventListener('click', onNavigate);
+			            this.view.appendChild(item);
+			        }
+		        }else {
+                    const el = document.createElement('empty-message');
 					el.setAttribute('icon', 'potted_plant');
 					el.setAttribute('message', 'No Item yet!');
 					this.view.appendChild(el);
-				}else {
-		            items.forEach(i =>{
-			            const item = document.createElement('item-block');
-			            const categoryQuery = categoryStore.get(i.categoryId);
-			            categoryQuery.onsuccess = e =>{
-				            const catName = e.target.result.name;
-                            item.setAttribute('data-category-name', catName);
-                            item.setAttribute('data-item-name', i.name);
-				            item.setAttribute('data-price', i.price);
-				            item.setAttribute('data-stock', i.stockCount);
-				            item.showProperties(...i.customProperties);
-				            item.setAttribute('data-link', `/item-view?id=${i.itemId}`);
-				            item.addEventListener('click', onNavigate);
-				            this.view.appendChild(item);
-                        }
-			        });
-			    }
+				}
 	        }
         })();
 		const bttn = document.createElement('add-button');
@@ -934,6 +933,7 @@ const main = (() => {
     document.querySelector('#search-shelf input').addEventListener('input', function() {
         searchShelf.render();
      });
+     alert(document.querySelector('body').style.fontFamily);
     //Add eventListeber with menu functions
     menuIcon.addEventListener('click',openMenu);
 	//Add eventListener with onNavigate
@@ -943,7 +943,7 @@ const main = (() => {
 		if (routes.hasOwnProperty(path)) {
 		    routes[path].render();
 		}else {
-		    rootDiv.innerHTML = 'Page not Found';
+		    routes['/'].render();
 		}
 	}
 })();
