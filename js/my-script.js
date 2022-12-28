@@ -129,6 +129,7 @@ const main = (() => {
 			const transaction= db.transaction(['items', 'categories'], 'readonly');
             const itemsStore = transaction.objectStore('items');
             const categoryStore = transaction.objectStore('categories');
+	    let cursorStarted;
             itemsStore.openCursor().onsuccess = event =>{
             	const cursor = event.target.result;
 	            if (cursor) {
@@ -146,8 +147,10 @@ const main = (() => {
 			            item.addEventListener('click', onNavigate);
 			            this.view.appendChild(item);
 				    cursor.continue();
+				    cursorStarted = true;
 			        }
-		        }else {
+		        }
+		        if (!cursorStarted){
                     const el = document.createElement('empty-message');
 					el.setAttribute('icon', 'potted_plant');
 					el.setAttribute('message', 'No Item yet!');
