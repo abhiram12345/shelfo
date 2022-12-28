@@ -943,7 +943,7 @@ const main = (() => {
 		if (routes.hasOwnProperty(path)) {
 		    routes[path].render();
 		}else {
-		    routes['/'].render();
+		    routeDiv.innerText = 'No page found';
 		}
 	}
 })();
