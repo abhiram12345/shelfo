@@ -146,9 +146,9 @@ const main = (() => {
 			            item.setAttribute('data-link', `/item-view?id=${i.itemId}`);
 			            item.addEventListener('click', onNavigate);
 			            this.view.appendChild(item);
-				    cursor.continue();
-				    cursorStarted = true;
 			        }
+			    cursor.continue();
+                            cursorStarted = true;
 		        }
 		        if (!cursorStarted){
                     const el = document.createElement('empty-message');
@@ -946,7 +946,7 @@ const main = (() => {
 		if (routes.hasOwnProperty(path)) {
 		    routes[path].render();
 		}else {
-		    routeDiv.innerText = 'No page found';
+		    rootDiv.innerText = 'No page found';
 		}
 	}
 })();
