@@ -125,12 +125,13 @@ const main = (() => {
 	itemsPage.render = function(e) {
 		this.setActivePage();
 		this.clean();
+		let currentKey;
 		let observer;
 		const loadMore = (entries, observer) =>{
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					observer.unobserve(entry.target);
-					loadItems(IDBKeyRange.upperBound(parseInt(entry.target.getAttribute('data-id')), true));
+					loadItems(IDBKeyRange.upperBound(currentKey), true);
 				}
             });
 		}
@@ -153,7 +154,6 @@ const main = (() => {
 		            const categoryQuery = categoryStore.get(i.categoryId);
 		            categoryQuery.onsuccess = e =>{
 			            const catName = e.target.result.name;
-			            item.setAttribute('data-id', i.itemId);
                         item.setAttribute('data-category-name', catName);
                         item.setAttribute('data-item-name', i.name);
 			            item.setAttribute('data-price', i.price);
@@ -163,11 +163,12 @@ const main = (() => {
 			            item.addEventListener('click', onNavigate);
 			            this.view.appendChild(item);
 			            loaded++;
-					    if (loaded <= 4) {
+					    if (loaded <= 15) {
 					        cursor.continue();
 					    }else {
+						    currentKey = i.itemId;
 						    const itemBlocks = document.getElementsByTagName('ITEM-BLOCK');
-				            observer.observe(itemBlocks[itemBlocks.length-1]);
+				            observer.observe(itemBlocks[itemBlocks.length-6]);
 						}
 			        }
 		        }
