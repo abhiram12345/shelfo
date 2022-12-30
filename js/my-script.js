@@ -125,12 +125,27 @@ const main = (() => {
 	itemsPage.render = function(e) {
 		this.setActivePage();
 		this.clean();
-		(() =>{
+		let observer;
+		const loadMore = (entries, observer) =>{
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					observer.unobserve(entry.target);
+					loadItems(IDBKeyRange.upperBound(parseInt(entry.target.getAttribute('data-id')), true));
+				}
+            });
+		}
+		const options = {
+			root:null,
+			rootMargin:'0px',
+			threshold:1.0
+        };
+        observer = new IntersectionObserver(loadMore, options);
+		const loadItems = (key) =>{
+			let loaded = 0;
 			const transaction= db.transaction(['items', 'categories'], 'readonly');
             const itemsStore = transaction.objectStore('items');
             const categoryStore = transaction.objectStore('categories');
-	    let cursorStarted;
-            itemsStore.openCursor().onsuccess = event =>{
+            itemsStore.openCursor(key, 'prev').onsuccess = event =>{
             	const cursor = event.target.result;
 	            if (cursor) {
 		            const i = cursor.value;
@@ -138,6 +153,7 @@ const main = (() => {
 		            const categoryQuery = categoryStore.get(i.categoryId);
 		            categoryQuery.onsuccess = e =>{
 			            const catName = e.target.result.name;
+			            item.setAttribute('data-id', i.itemId);
                         item.setAttribute('data-category-name', catName);
                         item.setAttribute('data-item-name', i.name);
 			            item.setAttribute('data-price', i.price);
@@ -146,18 +162,18 @@ const main = (() => {
 			            item.setAttribute('data-link', `/item-view?id=${i.itemId}`);
 			            item.addEventListener('click', onNavigate);
 			            this.view.appendChild(item);
+			            loaded++;
+					    if (loaded <= 4) {
+					        cursor.continue();
+					    }else {
+						    const itemBlocks = document.getElementsByTagName('ITEM-BLOCK');
+				            observer.observe(itemBlocks[itemBlocks.length-1]);
+						}
 			        }
-			    cursor.continue();
-                            cursorStarted = true;
 		        }
-		        if (!cursorStarted){
-                    const el = document.createElement('empty-message');
-					el.setAttribute('icon', 'potted_plant');
-					el.setAttribute('message', 'No Item yet!');
-					this.view.appendChild(el);
-				}
 	        }
-        })();
+        };
+        loadItems(null);
 		const bttn = document.createElement('add-button');
 		bttn.setAttribute('data-link', '/add-item');
 		bttn.className = 'fixed-elem';
@@ -946,7 +962,7 @@ const main = (() => {
 		if (routes.hasOwnProperty(path)) {
 		    routes[path].render();
 		}else {
-		    rootDiv.innerText = 'No page found';
+		    rootDiv.innerHTML = 'The page not found';
 		}
 	}
 })();
